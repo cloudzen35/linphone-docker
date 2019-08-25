@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t szengerle/linphone .
+docker build -t cloudzen35/linphone .
