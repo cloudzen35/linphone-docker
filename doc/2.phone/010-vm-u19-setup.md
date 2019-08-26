@@ -205,6 +205,14 @@ Y=-y
 
 
 ##
+# ---( INSTALL )--------------------------------------------
+#
+
+apt install $Y gdebi
+apt install $Y synaptic
+
+
+##
 # ---( BUILD )--------------------------------------------
 #
 
@@ -216,8 +224,6 @@ apt install $Y dh-autoreconf pkgconf
 
 apt install $Y default-jdk 
 apt install $Y maven
-
-apt install $Y gdebi
 
 
 ##
@@ -273,7 +279,88 @@ apt install $Y ipcalc ipv6calc
 ```
 
 
+Docker (CE)
+-----------
 
+```bash
+
+Y=-y
+
+
+##
+# ---( REMOVE )--------------------------------------------
+#
+
+snal list
+snap remove docker
+
+apt remove docker docker-engine docker.io containerd runc
+
+##
+# ---( REPO )--------------------------------------------
+#
+
+apt update
+
+apt install $Y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+    
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+apt-key fingerprint 0EBFCD88
+
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+
+##
+# ---( INSTALL )--------------------------------------------
+#
+
+apt update
+
+
+apt search docker
+
+apt install $Y docker-ce docker-ce-cli containerd.io
+
+
+# docker-compose
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+
+##
+# ---( CHECK )--------------------------------------------
+#
+
+systemctl status docker
+
+docker ps --all
+docker-compose help
+
+docker run hello-world
+
+##
+# ---( CONFIG )--------------------------------------------
+#
+
+groupadd docker
+
+U=cloudzen
+usermod -a -G docker $U
+
+sudo -i -u $U bash -c "whoami; docker ps --all"
+
+
+```
 
 
 
