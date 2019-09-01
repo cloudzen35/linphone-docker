@@ -267,7 +267,7 @@ yum install $Y ack
 
 
 Serial
-===================
+======
 
 
 Terminal
@@ -312,6 +312,17 @@ systemctl enable serial-getty@ttyS0.service
 
 minicom -D /dev/ttyS0
 
+##
+# from host:
+# 
+# VM - serial:
+#  - enable COM1
+#   - as (optional) 'named-pipe' file: '/tmp/vbox-px0-S0'
+#
+
+minicom -D /tmp/vbox-px0-S0
+
+
 
 ```
 
@@ -324,16 +335,48 @@ Console
 ```bash
 
 
-vim /etc/sysconfig/grub
+### vim /etc/sysconfig/grub
+### 
+### # add console=ttyS0 to the end of GRUB_CMDLINE_LINUX="rhgb quiet console=ttyS0"
+### 
+### stty -F /dev/ttyS0 speed 9600
+### grub2-mkconfig -o /boot/grub2/grub.cfg
+### 
+### 
 
-# add console=ttyS0 to the end of GRUB_CMDLINE_LINUX="rhgb quiet console=ttyS0"
 
-stty -F /dev/ttyS0 speed 9600
-grub2-mkconfig -o /boot/grub2/grub.cfg
+```
 
 
-systemctl start getty@ttyS0
 
+
+
+
+
+
+
+PBX Config
+==========
+
+* [Configuring Your PBX](https://wiki.freepbx.org/display/FPG/Configuring+Your+PBX)
+
+Module Upgrade
+--------------
+
+* [fwconsole commands (13+)](https://wiki.freepbx.org/pages/viewpage.action?pageId=37912685)
+
+
+
+```bash
+
+
+# module upgrade
+
+fwconsole ma showupgrades
+
+fwconsole ma upgradeall
+
+fwconsole restart
 
 ```
 
